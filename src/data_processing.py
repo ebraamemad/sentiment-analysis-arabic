@@ -1,8 +1,7 @@
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 import pandas as pd
-df= pd.read_csv('E:\projects\sentiment-analysis-arabic\sentiment-analysis-arabic\data\processed\ready_cleaned_arabic_data.csv')
-
+df = pd.read_csv('E:\\ready_data.csv')
 # Apply label encoding over the labels
 lable_encoder = preprocessing.LabelEncoder()
 encoded_labels =lable_encoder.fit_transform(df["class"])
