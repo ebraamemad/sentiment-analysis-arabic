@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1746194508831
+current_stage: None
+description: null
+last_updated_timestamp: 1746194508831
+name: ArabicSentimentAnalysis
+run_id: 36a3f04e7bdf445480931ee34925dedf
+run_link: null
+source: file:///E:/projects/sentiment-analysis-arabic/mlruns/0/36a3f04e7bdf445480931ee34925dedf/artifacts/model
+status: READY
+status_message: null
+storage_location: file:///E:/projects/sentiment-analysis-arabic/mlruns/0/36a3f04e7bdf445480931ee34925dedf/artifacts/model
+user_id: null
+version: 2
