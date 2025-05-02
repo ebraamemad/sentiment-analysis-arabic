@@ -1,0 +1,15 @@
+artifact_uri: file:///E:/projects/sentiment-analysis-arabic/mlruns/0/73dfbefe116e41a38d6d1d1bf87c55da/artifacts
+end_time: 1746192316327
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 73dfbefe116e41a38d6d1d1bf87c55da
+run_name: inquisitive-bear-571
+run_uuid: 73dfbefe116e41a38d6d1d1bf87c55da
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746192315487
+status: 4
+tags: []
+user_id: H

@@ -1,0 +1,15 @@
+artifact_uri: file:///E:/projects/sentiment-analysis-arabic/mlruns/0/55eb846b8fa44629afbc9b8987d13e58/artifacts
+end_time: 1746192606280
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 55eb846b8fa44629afbc9b8987d13e58
+run_name: righteous-mule-679
+run_uuid: 55eb846b8fa44629afbc9b8987d13e58
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746192600161
+status: 3
+tags: []
+user_id: H

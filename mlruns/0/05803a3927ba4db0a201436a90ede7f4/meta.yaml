@@ -1,0 +1,15 @@
+artifact_uri: file:///E:/projects/sentiment-analysis-arabic/mlruns/0/05803a3927ba4db0a201436a90ede7f4/artifacts
+end_time: 1746191631933
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 05803a3927ba4db0a201436a90ede7f4
+run_name: treasured-slug-703
+run_uuid: 05803a3927ba4db0a201436a90ede7f4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746191621065
+status: 3
+tags: []
+user_id: H

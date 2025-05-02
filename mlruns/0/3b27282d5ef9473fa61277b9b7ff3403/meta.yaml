@@ -1,0 +1,15 @@
+artifact_uri: file:///E:/projects/sentiment-analysis-arabic/mlruns/0/3b27282d5ef9473fa61277b9b7ff3403/artifacts
+end_time: 1746192890085
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3b27282d5ef9473fa61277b9b7ff3403
+run_name: Arabic_Sentiment_Model
+run_uuid: 3b27282d5ef9473fa61277b9b7ff3403
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746192878925
+status: 3
+tags: []
+user_id: H

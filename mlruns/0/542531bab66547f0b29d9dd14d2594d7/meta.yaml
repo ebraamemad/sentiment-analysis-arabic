@@ -1,0 +1,15 @@
+artifact_uri: file:///E:/projects/sentiment-analysis-arabic/mlruns/0/542531bab66547f0b29d9dd14d2594d7/artifacts
+end_time: 1746191845839
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 542531bab66547f0b29d9dd14d2594d7
+run_name: gifted-moose-165
+run_uuid: 542531bab66547f0b29d9dd14d2594d7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746191844979
+status: 4
+tags: []
+user_id: H

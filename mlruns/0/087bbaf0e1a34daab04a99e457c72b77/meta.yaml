@@ -1,0 +1,15 @@
+artifact_uri: file:///E:/projects/sentiment-analysis-arabic/mlruns/0/087bbaf0e1a34daab04a99e457c72b77/artifacts
+end_time: 1746191745834
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 087bbaf0e1a34daab04a99e457c72b77
+run_name: suave-colt-181
+run_uuid: 087bbaf0e1a34daab04a99e457c72b77
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746191744964
+status: 4
+tags: []
+user_id: H

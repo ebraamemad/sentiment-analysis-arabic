@@ -1,0 +1,15 @@
+artifact_uri: file:///E:/projects/sentiment-analysis-arabic/mlruns/0/d1150ae11a3b49be9cbd6dfc2dce035d/artifacts
+end_time: 1746118640452
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: d1150ae11a3b49be9cbd6dfc2dce035d
+run_name: fortunate-kit-727
+run_uuid: d1150ae11a3b49be9cbd6dfc2dce035d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746118631598
+status: 3
+tags: []
+user_id: H
