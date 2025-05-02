@@ -9,21 +9,39 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report, f1_score
 from mlflow.models import infer_signature
-from mlflow.models import validate_serving_input
 import sklearn
 import warnings
+
 warnings.filterwarnings('ignore')
 
-# 1. تحميل البيانات وتنظيفها
+# ====== تعريف كلاس يجمع كل شيء معاً ======
+from sklearn.base import BaseEstimator
+
+class ArabicSentimentModel(BaseEstimator):
+    def __init__(self, vectorizer, model, label_encoder):
+        self.vectorizer = vectorizer
+        self.model = model
+        self.label_encoder = label_encoder
+
+    def predict(self, texts):
+        X = self.vectorizer.transform(texts)
+        y_pred = self.model.predict(X)
+        return self.label_encoder.inverse_transform(y_pred)
+
+    def predict_proba(self, texts):
+        X = self.vectorizer.transform(texts)
+        return self.model.predict_proba(X)
+
+# ====== تحميل البيانات وتنظيفها ======
 data_path = Path("E:/ready_data.csv")
 df = pd.read_csv(data_path)
 df = df.dropna(subset=['tweet', 'class'])
 
-# 2. ترميز التصنيفات
+# ====== ترميز التصنيفات ======
 label_encoder = preprocessing.LabelEncoder()
 df['class'] = label_encoder.fit_transform(df["class"])
 
-# 3. تقسيم البيانات
+# ====== تقسيم البيانات ======
 X_train, X_test, y_train, y_test = train_test_split(
     df['tweet'].astype(str),
     df['class'],
@@ -32,27 +50,28 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=df['class']
 )
 
-# 4. إنشاء مجلدات الحفظ
+# ====== إنشاء مجلد لحفظ الموديل محليًا ======
 model_dir = Path("../models/best_model")
 model_dir.mkdir(parents=True, exist_ok=True)
 
-# 5. بدء تجربة MLflow
+# ====== بدء تجربة MLflow ======
 with mlflow.start_run(run_name="Arabic_Sentiment_v2") as run:
-    # 6. تحويل النصوص إلى متجهات
+
+    # ====== تحويل النصوص إلى متجهات ======
     vectorizer = TfidfVectorizer(
         ngram_range=(1, 2),
         max_features=10000,
-        stop_words=None  # يمكن إضافة كلمات توقف عربية هنا
+        stop_words=None
     )
     X_train_vec = vectorizer.fit_transform(X_train)
-    
-    # 7. البحث عن أفضل معلمات
+
+    # ====== البحث عن أفضل معلمات SVM ======
     param_grid = {
         'C': [0.1, 1, 10],
         'kernel': ['linear'],
         'gamma': ['scale']
     }
-    
+
     grid_search = GridSearchCV(
         SVC(probability=True),
         param_grid,
@@ -60,25 +79,30 @@ with mlflow.start_run(run_name="Arabic_Sentiment_v2") as run:
         scoring='f1_weighted',
         verbose=1
     )
-    
-    # 8. التدريب
+
+    # ====== التدريب ======
     grid_search.fit(X_train_vec, y_train)
     best_model = grid_search.best_estimator_
-    
-    # 9. التقييم
-    y_pred = best_model.predict(vectorizer.transform(X_test))
-    test_accuracy = best_model.score(vectorizer.transform(X_test), y_test)
+
+    # ====== التقييم ======
+    X_test_vec = vectorizer.transform(X_test)
+    y_pred = best_model.predict(X_test_vec)
+    test_accuracy = best_model.score(X_test_vec, y_test)
     f1 = f1_score(y_test, y_pred, average='weighted')
     report = classification_report(y_test, y_pred, output_dict=True)
-    
-    # 10. إعداد مثال الإدخال
-    input_example = {"texts": X_train.sample(2).tolist()}
+
+    # ====== إنشاء كائن يحتوي على كل شيء ======
+    final_model = ArabicSentimentModel(vectorizer, best_model, label_encoder)
+
+    # ====== إعداد signature و input example ======
+    input_texts = X_train.sample(2).tolist()
+    input_example = {"texts": input_texts}
     signature = infer_signature(
-        input_example,
-        best_model.predict(vectorizer.transform(input_example["texts"]))
+        pd.DataFrame({"texts": input_texts}),
+        final_model.predict(input_texts)
     )
-    
-    # 11. تسجيل كل شيء في MLflow
+
+    # ====== تسجيل المعلمات والنتائج ======
     mlflow.log_params(grid_search.best_params_)
     mlflow.log_metrics({
         "accuracy": test_accuracy,
@@ -86,33 +110,22 @@ with mlflow.start_run(run_name="Arabic_Sentiment_v2") as run:
         "train_samples": len(X_train),
         "test_samples": len(X_test)
     })
-    
-    # 12. حفظ المكونات محلياً
-    artifacts = {
-        "model": best_model,
-        "vectorizer": vectorizer,
-        "label_encoder": label_encoder
-    }
-    
-    for name, obj in artifacts.items():
-        with open(model_dir / f"{name}.pkl", "wb") as f:
-            pickle.dump(obj, f)
-    
-    # 13. تسجيل النموذج
+
+    # ====== تسجيل النموذج في MLflow ======
     mlflow.sklearn.log_model(
-        sk_model=artifacts,
+        sk_model=final_model,
         artifact_path="model",
         signature=signature,
-        input_example=input_example,
+        input_example=pd.DataFrame({"texts": input_texts}),
         registered_model_name="ArabicSentimentAnalysis",
-        pip_requirements=[
-            f"scikit-learn=={sklearn.__version__}",
-            "pandas",
-            "mlflow"
-        ]
+       
     )
-    
-    # 14. طباعة النتائج
+
+    # ====== حفظ الملفات محليًا كنسخة احتياطية ======
+    with open(model_dir / "model.pkl", "wb") as f:
+        pickle.dump(final_model, f)
+
+    # ====== طباعة النتائج ======
     print(f"\n✅ تم الانتهاء بنجاح!")
     print(f"🔗 Run ID: {run.info.run_id}")
     print(f"📊 الدقة: {test_accuracy:.2%}")
